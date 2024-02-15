@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace DictionariesApp
@@ -17,13 +13,13 @@ namespace DictionariesApp
     internal class UserDictionary
     {
         // Исходный язык.
-        private string _sourceLanguage;
+        private readonly string _sourceLanguage;
 
         // Целевой язык.
-        private string _targetLanguage;
+        private readonly string _targetLanguage;
 
         // Контейнер для информации в словаре.
-        private SortedDictionary<string, List<string>> _dictionary;
+        private readonly SortedDictionary<string, List<string>> _dictionary;
 
         // Текущее успешно найденное слово в словаре.
         private string _currentWord;
@@ -34,7 +30,6 @@ namespace DictionariesApp
         // Конструктор с 2мя параметрами, принимает исходный и целевой языки.
         public UserDictionary(string sourceLanguage, string targetLanguage)
         {
-
             this._sourceLanguage = sourceLanguage;
             this._targetLanguage = targetLanguage;
             this._dictionary = new SortedDictionary<string, List<string>>();
@@ -46,7 +41,6 @@ namespace DictionariesApp
         // Добавление в словарь возможно только при корректных вводах исходного и целевого выражений.
         private void addEntry()
         {
-
             string sourceString = this.sourceStringInput();
 
             if (sourceString == null)
@@ -54,7 +48,7 @@ namespace DictionariesApp
                 return;
             }
 
-            if (this._dictionary.ContainsKey(sourceString) == true)
+            if (this._dictionary.ContainsKey(sourceString))
             {
                 Message.ShowError("Такое слово уже есть в словаре!");
                 return;
@@ -79,8 +73,6 @@ namespace DictionariesApp
             this.saveToFile(this._sourceLanguage + "-" + this._targetLanguage);
 
             Message.ShowMessage("Запись добавлена в словарь!");
-
-            return;
         }
 
         // Метод проверки ввода.
@@ -90,10 +82,9 @@ namespace DictionariesApp
         // Возвращает true при корректном воде, иначе возвращает false.
         private bool isInputGood(string inputString)
         {
-
             Regex regex = new Regex(@"^([A-Z]?[a-z]+((\s|\-)?[A-Z]?[a-z]+)*)|([А-ЯЁЇІЄҐ]?[а-яёїієґ']+((\s|\-)?[А-ЯЁЇІЄҐ]?[а-яёїієґ']+)*)", RegexOptions.Compiled);
 
-            if (regex.IsMatch(inputString) == true)
+            if (regex.IsMatch(inputString))
             {
                 return true;
             }
@@ -109,16 +100,15 @@ namespace DictionariesApp
         // Проверяет ввод, возвращая введенную строку при корректном вводе и null при некорректном или пустом вводе.
         private string sourceStringInput()
         {
-
             string userInput =
                 Microsoft.VisualBasic.Interaction.InputBox("Введите исходное слово/сочетание :", "Ввод исходной строки");
 
-            if (String.IsNullOrEmpty(userInput) == true)
+            if (String.IsNullOrEmpty(userInput))
             {
                 return null;
             }
 
-            if (isInputGood(userInput) == true)
+            if (isInputGood(userInput))
             {
                 return userInput;
             }
@@ -134,7 +124,6 @@ namespace DictionariesApp
         // Возвращает сформированный список строк перевода при корректном вводе и null при некорректном или пустом вводе.
         private List<string> targetStringsInput()
         {
-
             string userInput =
                 Microsoft.VisualBasic.Interaction.InputBox("Введите перевод слова/сочетания (через ; без пробела если несколько) :", "Ввод перевода");
 
@@ -147,7 +136,7 @@ namespace DictionariesApp
 
             foreach (string targetWord in targetStrings)
             {
-                if (isInputGood(targetWord) == false)
+                if (!isInputGood(targetWord))
                 {
                     return null;
                 }
@@ -175,7 +164,6 @@ namespace DictionariesApp
         #endregion
         public void saveToFile(string dictionaryName)
         {
-
             if (this._dictionary == null)
             {
                 return;
@@ -189,7 +177,6 @@ namespace DictionariesApp
 
             if (this._dictionary.Count != 0)
             {
-
                 foreach (KeyValuePair<string, List<string>> word in this._dictionary)
                 {
 
@@ -216,8 +203,6 @@ namespace DictionariesApp
             }
 
             xmlDoc.Save(Directory.GetCurrentDirectory() + "\\..\\..\\Dictionaries\\" + dictionaryName + ".xml");
-
-            return;
         }
 
         // Метод загрузки словаря из файла формата XML.
@@ -237,7 +222,6 @@ namespace DictionariesApp
         #endregion
         public void loadFromFile(string dictionaryName)
         {
-
             if (this._dictionary == null)
             {
                 return;
@@ -257,7 +241,6 @@ namespace DictionariesApp
 
             foreach (XmlNode wordNode in wordNodesList)
             {
-
                 string sourceWord = "";
 
                 List<string> targetWordsList = new List<string>();
@@ -293,8 +276,6 @@ namespace DictionariesApp
                     Message.ShowError(exception.Message);
                 }
             }
-
-            return;
         }
 
         // Метод поиска перевода в словаре.
@@ -303,10 +284,9 @@ namespace DictionariesApp
         // Если соответствующая запись не найдена, информирует об этом.
         private void findEntry(string sourceWord)
         {
-
             bool isEntryFound = this._dictionary.TryGetValue(sourceWord, out List<string> targetWords);
 
-            if (isEntryFound == true)
+            if (isEntryFound)
             {
                 // Зафиксировать найденное слово для дальнейшей работы.
                 this._currentWord = sourceWord;
@@ -320,8 +300,6 @@ namespace DictionariesApp
                 this.clearTargetWindow();
                 this.showSourceString(sourceWord);
             }
-
-            return;
         }
 
         // Метод вывода переводов.
@@ -330,8 +308,7 @@ namespace DictionariesApp
         // Если длина перевода больше ширины области, вывод переносится на новую строку данной области.
         private void showTargetStrings(List<string> targetWords)
         {
-
-            if (String.IsNullOrEmpty(this._currentWord) == true)
+            if (String.IsNullOrEmpty(this._currentWord))
             {
                 Message.ShowWarning("Введите исходное слово!");
                 return;
@@ -383,16 +360,13 @@ namespace DictionariesApp
 
             // Вернуть курсор в исходную позицию.
             Console.SetCursorPosition(formerCoord[0], formerCoord[1]);
-
-            return;
         }
 
         // Метод вывода исходной строки.
         // Выводить переводы слова. Если перевод не влезает по ширине в область вывода, переносить вывод на следующую строку.
         private void showSourceString(string sourceString)
         {
-
-            if (String.IsNullOrEmpty(this._currentWord) == true)
+            if (String.IsNullOrEmpty(this._currentWord))
             {
                 return;
             }
@@ -411,16 +385,13 @@ namespace DictionariesApp
 
                 Console.Write(sourceString[i]);
             }
-
-            return;
         }
 
         // Метод добавления строки перевода в словарь.
         // Добавляет новый список переводов к имеемому списку. Если встречается одинаковый перевод, не добавляет его.
         private void addTargetString()
         {
-
-            if (String.IsNullOrEmpty(this._currentWord) == true)
+            if (String.IsNullOrEmpty(this._currentWord))
             {
                 Message.ShowWarning("Введите исходное слово!");
                 return;
@@ -436,7 +407,7 @@ namespace DictionariesApp
             foreach (string targetString in additionalTargetStrings)
             {
 
-                if (this._dictionary[this._currentWord].Contains(targetString) == false)
+                if (!this._dictionary[this._currentWord].Contains(targetString))
                 {
                     this._dictionary[this._currentWord].Add(targetString);
                 }
@@ -451,8 +422,6 @@ namespace DictionariesApp
             this.refreshTargetWindow();
 
             this.saveToFile(this._sourceLanguage + "-" + this._targetLanguage);
-
-            return;
         }
 
         // Метод редактирования строки на исходном языке.
@@ -460,8 +429,7 @@ namespace DictionariesApp
         // редактируемая непосредственно в этом окне. Результат редактирования проверяется на корректность.
         private void editSourceString()
         {
-
-            if (String.IsNullOrEmpty(this._currentWord) == true)
+            if (String.IsNullOrEmpty(this._currentWord))
             {
                 Message.ShowWarning("Введите исходное слово!");
                 return;
@@ -476,7 +444,7 @@ namespace DictionariesApp
                 return;
             }
 
-            if (isInputGood(userInput) == true)
+            if (isInputGood(userInput))
             {
                 // Получить список переводов по данному ключу и сохранить его под новым ключом,
                 // после чего удалить прежнюю запись и обновить область ввода.
@@ -489,8 +457,6 @@ namespace DictionariesApp
 
                 this.refreshSourceWindow();
             }
-
-            return;
         }
 
         // Метод редактирования перевода.
@@ -498,8 +464,7 @@ namespace DictionariesApp
         // редактируемый непосредственно в этом окне. Результат редактирования проверяется на корректность.
         private void editTargetStrings()
         {
-
-            if (String.IsNullOrEmpty(this._currentWord) == true)
+            if (String.IsNullOrEmpty(this._currentWord))
             {
                 Message.ShowWarning("Введите исходное слово!");
                 return;
@@ -531,7 +496,7 @@ namespace DictionariesApp
             foreach (string targetWord in targetStrings_New)
             {
 
-                if (isInputGood(targetWord) == false)
+                if (!isInputGood(targetWord))
                 {
                     return;
                 }
@@ -547,16 +512,13 @@ namespace DictionariesApp
             this.refreshTargetWindow();
 
             this.saveToFile(this._sourceLanguage + "-" + this._targetLanguage);
-
-            return;
         }
 
         // Метод удаления записи из словаря.
         // Удаляет текущее обрабатываемое исходное слово и все его переводы.
         private void removeEntry()
         {
-
-            if (String.IsNullOrEmpty(this._currentWord) == true)
+            if (String.IsNullOrEmpty(this._currentWord))
             {
                 Message.ShowWarning("Введите исходное слово!");
                 return;
@@ -574,15 +536,12 @@ namespace DictionariesApp
             Message.ShowMessage("Запись удалена из словаря!");
 
             Console.SetCursorPosition(1, 5);
-
-            return;
         }
 
         // Метод сохранения текущей записи в файл.
         private void saveEntryToFile()
         {
-
-            if (String.IsNullOrEmpty(this._currentWord) == true)
+            if (String.IsNullOrEmpty(this._currentWord))
             {
                 Message.ShowWarning("Введите исходное слово!");
                 return;
@@ -591,17 +550,15 @@ namespace DictionariesApp
             // Директория для выходного файла.
             string savePath = Directory.GetCurrentDirectory() + "\\..\\..\\Output";
 
-            if (Directory.Exists(savePath) == false)
+            if (!Directory.Exists(savePath))
             {
                 Directory.CreateDirectory(savePath);
             }
 
             using (FileStream fs = new FileStream(savePath + "\\output.txt", FileMode.Append))
             {
-
                 using (StreamWriter sw = new StreamWriter(fs, Encoding.Unicode))
                 {
-
                     sw.WriteLine("Исходное слово : ");
                     sw.WriteLine(this._currentWord);
                     sw.WriteLine();
@@ -621,18 +578,13 @@ namespace DictionariesApp
                     Message.ShowMessage("Запись выведена в файл!");
                 }
             }
-
-            return;
         }
 
         // Метод очистки окна исходного языка.
         private void clearSourceWindow()
         {
-
             Drawer.fillRectangleArea(1, 5, 49, 6, ConsoleColor.White);
             Console.SetCursorPosition(1, 5);
-
-            return;
         }
 
         // Метод очистки окна целевого языка.
@@ -641,37 +593,27 @@ namespace DictionariesApp
         // Метод обновления окна исходного языка.
         private void refreshSourceWindow()
         {
-
             this.clearSourceWindow();
             this.showSourceString(this._currentWord);
-
-            return;
         }
 
         // Метод обновления окна целевого языка.
         private void refreshTargetWindow()
         {
-
             this._dictionary.TryGetValue(this._currentWord, out List<string> targetWords);
             this.showTargetStrings(targetWords);
-
-            return;
         }
 
         // Метод создания и обработки окна словаря.
         public void mainWindow()
         {
-
             this.drawWindow(0, 0, 100, 15, ConsoleColor.Black, ConsoleColor.White);
             this.processWindowInput(47, ConsoleColor.White, ConsoleColor.Black);
-
-            return;
         }
 
         // Метод обработки ввода в окне словаря.
         private void processWindowInput(int maxLineLength, ConsoleColor backgroundColor, ConsoleColor foregroundColor)
         {
-
             Console.BackgroundColor = backgroundColor;
             Console.ForegroundColor = foregroundColor;
 
@@ -687,7 +629,6 @@ namespace DictionariesApp
             // Выражение для расчета Х-координаты курсора.
             CursorCoordFunc xCoord = (int lines, int length) =>
             {
-
                 if (inputLines == 0)
                     return inputResult.Length + 1;
                 else
@@ -696,7 +637,6 @@ namespace DictionariesApp
 
             while (true)
             {
-
                 var k = Console.ReadKey(true);
 
                 switch (k.Key)
@@ -784,16 +724,13 @@ namespace DictionariesApp
                         // В окне допускается вводить только буквы, пробелы и дефисы.
                         if (char.IsLetter(k.KeyChar) || k.KeyChar == '-' || k.KeyChar == ' ')
                         {
-
                             if (inputLines < 6)
                             {
-
                                 inputResult += k.KeyChar;
                                 Console.Write(k.KeyChar);
 
                                 if (Console.CursorLeft == maxLineLength + 1)
                                 {
-
                                     if (inputLines < 5)
                                     {
                                         Console.SetCursorPosition(x, ++y);
@@ -930,8 +867,6 @@ namespace DictionariesApp
             // Сменить цвета текста и фона на начальные.
             Console.ForegroundColor = initialForegroundColor;
             Console.BackgroundColor = initialBackgroundColor;
-
-            return;
         }
     }
 }

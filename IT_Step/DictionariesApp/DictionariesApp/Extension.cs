@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DictionariesApp
+﻿namespace DictionariesApp
 {
     internal static class Extension
     {
@@ -13,7 +7,6 @@ namespace DictionariesApp
         // тем самым увеличивая общую длину строки до указанной.
         public static string PadCenter(this string sourceString, int length)
         {
-
             // Условие, при котором действие не имеет смысла.
             if ((sourceString.Length >= length) || (sourceString.Length + 1 == length))
             {

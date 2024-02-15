@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DictionariesApp
+﻿namespace DictionariesApp
 {
     internal class Application
     {
@@ -25,7 +19,7 @@ namespace DictionariesApp
 
             DirectoryInfo dir = new DirectoryInfo(dictionaryPath);
 
-            if (dir.Exists == true)
+            if (dir.Exists)
             {
 
                 FileInfo[] files = dir.GetFiles();
@@ -52,7 +46,6 @@ namespace DictionariesApp
         // Возвращает строку, содержащую выбранный язык.
         private string chooseLanguage(int upLeft_x, int upLeft_y, string title)
         {
-
             this.mainWindow();
 
             // Сформировать массив доступных языков из перечисления языков.
@@ -75,7 +68,6 @@ namespace DictionariesApp
         // Запрашивает у Пользователя выбор исходного и целевого языков, создает словарь и соответствующий ему файл.
         private void createNewDictionary()
         {
-
             string sourceLanguage = this.chooseLanguage(40, 5, " Исходный язык ");
 
             if (sourceLanguage == null)
@@ -96,7 +88,7 @@ namespace DictionariesApp
                 return;
             }
 
-            if (isExist(sourceLanguage, targetLanguage) == true)
+            if (isExist(sourceLanguage, targetLanguage))
             {
                 Message.ShowError("Такой словарь уже существует!");
                 return;
@@ -109,8 +101,6 @@ namespace DictionariesApp
                 this._currentDictionary.saveToFile(sourceLanguage + "-" + targetLanguage);
                 Message.ShowMessage("Словарь создан!");
             }
-
-            return;
         }
 
         // Метод выхода из программы.
@@ -189,8 +179,6 @@ namespace DictionariesApp
             // Сменить цвета текста и фона на начальные.
             Console.ForegroundColor = initialForegroundColor;
             Console.BackgroundColor = initialBackgroundColor;
-
-            return;
         }
 
         // Метод загрузки словаря.
@@ -215,8 +203,6 @@ namespace DictionariesApp
                 this._currentDictionary.loadFromFile(dictionaryName);
                 this._currentDictionary.mainWindow();
             }
-
-            return;
         }
 
         // Метод выбора словаря для загрузки.
@@ -224,12 +210,11 @@ namespace DictionariesApp
         // Возвращает строку, содержащую название выбранного словаря.
         private string chooseDictionaryToLoad()
         {
-
             this.mainWindow();
 
             DirectoryInfo dir = new DirectoryInfo(Directory.GetCurrentDirectory() + "\\..\\..\\Dictionaries\\");
 
-            if (dir.Exists == false)
+            if (!dir.Exists)
             {
                 Message.ShowError("Директория загрузки не существует!");
                 return null;
@@ -268,7 +253,6 @@ namespace DictionariesApp
         // Метод меню для работы с Приложением.
         public void mainMenu()
         {
-
             Console.Title = "Dictionaries_C#";
 
             while (true)
@@ -293,8 +277,6 @@ namespace DictionariesApp
                         break;
                 }
             }
-
-            return;
         }
     }
 }

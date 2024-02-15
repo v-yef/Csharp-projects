@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DictionariesApp
+﻿namespace DictionariesApp
 {
     internal class Drawer
     {
@@ -32,8 +26,6 @@ namespace DictionariesApp
             Console.SetCursorPosition(formerCoord[0], formerCoord[1]);
             // Сменить цвет фона на начальный.
             Console.BackgroundColor = initialBackgroundColor;
-
-            return;
         }
 
         // Метод вывода прямоугольника.
@@ -75,8 +67,6 @@ namespace DictionariesApp
             // Сменить цвета текста и фона на начальные.
             Console.ForegroundColor = initialForegroundColor;
             Console.BackgroundColor = initialBackgroundColor;
-
-            return;
         }
 
         // Метод вывода горизонтальной линии.
@@ -99,8 +89,6 @@ namespace DictionariesApp
             // Сменить цвета текста и фона на начальные.
             Console.ForegroundColor = initialForegroundColor;
             Console.BackgroundColor = initialBackgroundColor;
-
-            return;
         }
 
         // Метод вывода вертикальной линии.
@@ -123,8 +111,6 @@ namespace DictionariesApp
             // Сменить цвета текста и фона на начальные.
             Console.ForegroundColor = initialForegroundColor;
             Console.BackgroundColor = initialBackgroundColor;
-
-            return;
         }
 
         // Метод вывода текста по координатам.
@@ -144,8 +130,6 @@ namespace DictionariesApp
             // Сменить цвета текста и фона на начальные.
             Console.ForegroundColor = initialForegroundColor;
             Console.BackgroundColor = initialBackgroundColor;
-
-            return;
         }
 
         // Метод вычисления X-координаты строки, центрированной по заданной ширине области.
